@@ -1,0 +1,12 @@
+Every nonempy compact subset of the complexes is the spectrum of an element in a Banach algebra
+
+"The spectrum of an element in a Banach algebra is nonempty and
+compact" is one of those funny theorems that I convinced myself of by
+first seeing it invoked a bunch of times before I got around to paying
+the karmic debt of actually learning the proof. Not knowing why it was
+true in one direction was probably why it surprised me at first to
+learn that it was also true in the other.
+
+The witness to this fact is pretty underwhelming: the continuous
+functions on $K$ are a Banach algebra, and $K$ is the spectrum of the
+identity.

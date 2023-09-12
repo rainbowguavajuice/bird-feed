@@ -1,0 +1,20 @@
+<article class="para">
+<header>
+<time datetime="{ $date }">{ $date; }</time>
+<h3><a href="{ $url; }">{ $title; }</a></h3>
+</header>
+<div>
+{
+	# find paragraph break
+	my $idx = -1;
+	for my $i (0 .. $#body) {
+	    if ($body[$i] eq '-----') { $idx = $i-1; last; }
+	}
+	$OUT .= join "\n", map { "<p>$_</p>"; } ($idx == -1 ? @body : @body[0..$idx]);
+
+	if ($idx != -1) {
+	$OUT .= "<div class=\"read-more\"><a href=\"$url\">read more</a></div>";
+	}
+}
+</div>
+</article>
