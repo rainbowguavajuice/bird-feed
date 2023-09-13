@@ -20,13 +20,6 @@ body {
     padding-bottom: 2em;
 }
 
-body > header {
-    padding-top: 1ex;
-}
-body > header > h1 {
-    font-family: 'Outfit', sans-serif;
-}
-
 a:link {
     color: #888;
     text-decoration: underline #f8f8f8;
@@ -37,6 +30,21 @@ a:visited {
 }
 a:hover {
     text-decoration-color: #888;
+}
+
+body > header {
+    padding-top: 1ex;
+}
+body > header h1 {
+    color: #555;
+    font-family: 'Outfit', sans-serif;
+}
+body > header > a:link {
+    text-decoration: none;
+}
+
+main > h2 {
+    color: #555;
 }
 
 .read-more a {
