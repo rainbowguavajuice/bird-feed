@@ -94,8 +94,9 @@ body > footer {
     text-align: center;
     height: 2em;
 
-    color: #999;
-    font-family: sans-serif;
+    color: #bbb;
+    font-size: small;
+    font-family: 'Outfit', sans-serif;
     
     position: absolute;
     bottom: 0;
