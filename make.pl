@@ -12,7 +12,10 @@ binmode STDOUT, ":utf8";
 use constant {
     TMPL_DIR  => 'template/',
     SRC_DIR   => 'src/',
-    OUT_DIR   => 'www/',
+    # this should be named something more sensible, but hosting on
+    # github pages is either this or building directly into the
+    # project root directory.
+    OUT_DIR   => 'docs/',
     PML_DIR   => 'permalink/'
 };
 
@@ -117,9 +120,9 @@ sub fmt_post {
 # array; this is passed directly to the template which decides how to
 # interpret it.
 #
-my @pages = ({ page_name => 'latest',  path => 'index.html', list => [] },
+my @pages = ({ page_name => 'latest',  path => 'index.html',   list => [] },
 	     { page_name => 'about',   path => 'about.html',   list => [] },
-	     { page_name => 'archive', path => 'archive.html',   list => [] });
+	     { page_name => 'archive', path => 'archive.html', list => [] });
 
 # the 'archive' and 'latest' pages are special because their data is
 # built by reading the source folder later; remember where they are in
