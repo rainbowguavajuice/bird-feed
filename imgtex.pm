@@ -1,76 +1,103 @@
 package imgtex;
 use MIME::Base64 qw(encode_base64);
 
+use strict;
+
 our @ISA = qw(Exporter);
 our @EXPORT = qw(imgtex);
 
-my $TEX_BIN  = 'tex';
-my $DVIPNG_BIN = 'dvipng';
-my $OUT = 'tmp';
+# my @para = (
+#     q(one $tex$ two $tex2$ three $\displaystyle\int_\gamma{1\over z-z_0}\,{\roman d}z$ four $Q^{-1}$),
+#     q(four $hello$ five $1\over 2$ more $\Bbb C$));
 
-my $fh;
+use constant {
+    OUT => 'tmp',
+    TEX_BIN => 'tex',
+    DVIPNG_BIN => 'dvipng',
+    TEX_REGEXP => qr/\$((?:.|\s)+?)\$/,
+    VERTSEP => 1
+};
 
-my $tex_preamble = q(\font\tenamsb=msbm10 
-\newfam\bbfam
-\textfont\bbfam=\tenamsb
-\def\Bbb{\fam\bbfam});
+# file handles; reused.
+my ($fh_tex, $fh_png);
+
+# deeply evil static variables. get reset at the beginning of `imgtex`
+# and incremented with each call of `imgtex_inline`.
+my ($count, @dimen);
+
+sub imgtex_inline {
+    my ($ft, $wd, $ht, $dp) = @{$dimen[$count]};
+    ++$count;
+
+    # pull PNG from the region of the DVI containing the snippet we want
+    my ($png_o, $png_w, $png_h, $png_d) = ($ft, $wd, $ht + $dp + 2 * VERTSEP, $dp + VERTSEP);
+    system "${\DVIPNG_BIN}" .
+	# 1850.112
+    " -D462.528 -O0pt,-${png_o}pt -T${png_w}pt,${png_h}pt" .
+    " -q* -o ${\OUT}.png ${\OUT}.dvi";
+
+    open $fh_png, '<', "${\OUT}.png";
+    my $png_data = do { local $/; <$fh_png>; };
+    close $fh_png;
+
+    my $pt_to_em = 1/10;
+    my $css_h = $png_h * $pt_to_em;
+    my $css_d = $png_d * $pt_to_em;
+
+    # return the <img> tag to be substituted in.
+    q(<img style="height:) . $css_h .
+	q(em; vertical-align: -) . $css_d .
+	q(em;" src="data:image/png;base64,) .
+	encode_base64($png_data) .
+	q("/>);
+}
 
 sub imgtex {
 
-    my ($tex_str) = @_;
+    my ($para) = @_;
 
-    open $fh, '>', $OUT_TEX;
+    $count = 0;
+    @dimen = ();
 
-    # generate TeX source file
-    my $tex_src =
-	$tex_preamble .
-	q(\def\myeqn{$). $tex_str . q($}%
-\nointerlineskip\noindent%
-\def\mystrut{\vrule height 10pt depth 3.5pt width 0pt}%
-\newbox\mybox\setbox\mybox\hbox{\mystrut\myeqn}%
-\openout0=). $OUT . q(.dim\write0{%
-\the\wd\mybox\the\ht\mybox\the\dp\mybox}%
-\closeout0%
-\noindent\unhcopy\mybox\end);
+    my @inline_tex;
+    push @inline_tex, map { local $/; $_ =~ m/${\TEX_REGEXP}/g; } @$para;
+    print "TeX snippet: $_\n" for @inline_tex;
 
-    open $fh, '>', "$OUT.tex";
-    print $fh $tex_src;
-    close $fh;
+    open $fh_tex, '>', "${\OUT}.tex";
+    # the \vertsep rules place margins between neighbouring lines because
+    # some letters seem to be stealthily higher than they claim to be.
+    print $fh_tex
+	q(\input amstex \loadmsbm\loadeufm) .
+	q(\newdimen\vertsep\vertsep) . VERTSEP . q(pt) .
+	q(\newdimen\fromtop\fromtop0pt) .
+	q(\def\vertseprule{\hrule height \vertsep width 0pt}) .
+	q(\newbox\mybox) .
+	q(\newwrite\myout\immediate\openout\myout=) . OUT . '.dim' .
+	q(\topskip0pt\offinterlineskip);
+    foreach (@inline_tex) {
+	print $fh_tex
+	    q(\setbox\mybox\hbox{$) .
+	    $_ .
+	    q($}) .
+	    q(\immediate\write\myout{\the\fromtop\the\wd\mybox\the\ht\mybox\the\dp\mybox}) .
+	    q(\advance\fromtop\ht\mybox\advance\fromtop\dp\mybox\advance\fromtop2\vertsep) .
+	    q(\vertseprule\noindent\unhcopy\mybox\vertseprule);
+    }
+    print $fh_tex q(\closeout\myout\end);
+    close $fh_tex;
 
-    # compile the TeX
-    system "$TEX_BIN $OUT.tex";
+    # compile the TeX. this also writes dimension information to OUT.dim
+    system "${\TEX_BIN} ${\OUT}.tex";
 
-    # read output dimensions
-    open $fh, '<', "$OUT.dim";
+    # read back dimension info
+    open $fh_tex, '<', "${\OUT}.dim";
+    while (<$fh_tex>) {
+	my @dim = $_ =~ m/(.*)pt(.*)pt(.*)pt(.*)pt/;
+	push @dimen, \@dim;
+    }
+    close $fh_tex;
 
-    <$fh> =~ /(.+)pt(.+)pt(.+)pt/;
-    my ($wd, $ht, $dp) = ($1, $2, $3);
-
-    close $fh;
-
-#    print "dimensions: $wd $ht $dp";
-
-    my $png_w = $wd;
-    my $png_h = $ht + $dp;
-    # convert to png
-    system "$DVIPNG_BIN -D1850.112 -T${png_w}pt,${png_h}pt -q* -o $OUT.png $OUT.dvi";
-    #system "$DVIPNG_BIN -D462.528 -T${png_w}pt,${png_h}pt -q* -o $OUT.png $OUT.dvi";
-
-    open $fh, '<', "$OUT.png";
-    my $png_data = do { local $/; <$fh> };
-    close $fh;
-
-    my $pt_to_em = 1/10;
-    my $css_w = $png_w * $pt_to_em;
-    my $css_h = $png_h * $pt_to_em;
-    my $css_d = $dp    * $pt_to_em;
-
-#    print "$css_w, $css_h, $css_d\n";
-
-    '<img style="height:'
-    . $css_h . 'em; width:'
-    . $css_w . 'em; vertical-align:-'
-    . $css_d . 'em" src="data:image/png;base64,'
-    . encode_base64($png_data) . '"/>';
+    # substitute
+    do { local $/; $_ =~ s/${\TEX_REGEXP}/(imgtex_inline)/eg; } for @$para;
 }
 1;

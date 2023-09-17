@@ -11,7 +11,7 @@ body {
     color: #111;
     background-color: #fff;
     font-family: 'Noto Serif', serif;
-    
+    font-smooth: never;
 
     min-height: 100vh;
     max-width: 1080px;
@@ -35,6 +35,7 @@ body > header {
     padding-top: 1ex;
 }
 body > header h1 {
+    /* logo; maybe replace with image later. */
     font-family: 'Outfit', sans-serif;
 }
 body > header > a:link {
@@ -45,11 +46,11 @@ main > h2 {
 }
 
 .read-more a {
-    font-family: 'Outfit', sans-serif;
+    /* font-family: 'Outfit', sans-serif; */
 }
 
 time {
-    font-family: 'Outfit', sans-serif;  
+    /* font-family: 'Outfit', sans-serif;   */
 }
 
 article {
@@ -91,7 +92,7 @@ body > footer {
     height: 2em;
 
     font-size: small;
-    font-family: 'Outfit', sans-serif;
+    /* font-family: 'Outfit', sans-serif; */
     
     position: absolute;
     bottom: 0;

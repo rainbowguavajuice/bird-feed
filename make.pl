@@ -72,29 +72,24 @@ sub permalink_url { url_from_path PML_DIR.$_[0].'.html'; }
 # verbosity.
 sub fmt_post {
     my ($date, $id, $path) = @_;
-    
+
     open $fh, '<', $path;
 
     # the first line is always the title.
     chomp (my $head = <$fh>);
     # for the remainder of the file, read paragraph-by-paragraph.
     my @tail;
-    local $/ = "";
-    while (<$fh>) {
-	chomp;
-	# in the future this is where extra processing could be done,
-	# for example here's a crummy regex thing that bolds
-	# everything enclosed between pairs of dollar signs (i will
-	# torture myself with trying to process TeX input some other
-	# day)
-	local $/;
-	s/\$((.|\s)+?)\$/imgtex $1/eg;
-	
-	
-	push @tail, $_;
+    {
+	local $/ = "";
+	while (<$fh>) {
+	    chomp;
+	    push @tail, $_;
+	}
     }
-    
     close $fh;
+
+    # post-processing: render all the bits of TeX
+    imgtex \@tail;
 
     my $url = permalink_url $id;
 
@@ -116,7 +111,7 @@ sub fmt_post {
 		 date  => $date,
 		 url   => $url,
 		 title => $head,
-  		 body  => \@tail }
+		 body  => \@tail }
 	     );
      } ('post_line', 'post_para', 'post_full'));
 }
@@ -152,17 +147,17 @@ my $navi = $tmpl{navi}->fill_in(
 my (@urls, @lines, @paras);
 
 foreach (@src) {
-    
+
     my $permalink_path = PML_DIR.$_->{id}.'.html';
     print "generate $permalink_path from $_->{path}\n";
 
     my ($url, $meta, $line, $para, $full) =
 	fmt_post $_->{date}, $_->{id}, $_->{path};
-    
+
     push @urls,  $url;
     push @lines, $line;
     push @paras, $para;
-    
+
     # accumulate for line and para views, but write to the full view
     # page immediately
     open $fh, '>', OUT_DIR.$permalink_path;
@@ -174,9 +169,9 @@ foreach (@src) {
 		    navi      => $navi,
 		    main      => $full },
 	OUTPUT => $fh);
-    
+
     close $fh;
-    
+
 }
 
 $archive_page->{list} = \@lines;
@@ -205,7 +200,7 @@ sub fmt_page {
 	$tmpl{$page_name}->fill_in(
 	    STRICT => 1,
 	    HASH   => { list => $list });
-    
+
     $tmpl{frame}->fill_in(
 	STRICT => 1,
 	HASH   => { meta      => $meta,
@@ -228,4 +223,3 @@ $tmpl{script}->fill_in(
     HASH   => { list => \@urls },
     OUTPUT => $fh);
 close $fh;
-
