@@ -8,8 +8,8 @@ body {
     margin: 0 auto;
     padding: 0 8%;
     
-    color: #333;
-    background-color: #f8f8f8;
+    color: #111;
+    background-color: #fff;
     font-family: 'Noto Serif', serif;
     
 
@@ -21,22 +21,20 @@ body {
 }
 
 a:link {
-    color: #888;
-    text-decoration: underline #f8f8f8;
-    transition: text-decoration-color 80ms;
+    color: #111;
+    text-decoration: underline;
 }
 a:visited {
-    color: #888;
+    color: #111;
 }
 a:hover {
-    text-decoration-color: #888;
+    text-decoration: none;
 }
 
 body > header {
     padding-top: 1ex;
 }
 body > header h1 {
-    color: #555;
     font-family: 'Outfit', sans-serif;
 }
 body > header > a:link {
@@ -44,7 +42,6 @@ body > header > a:link {
 }
 
 main > h2 {
-    color: #555;
 }
 
 .read-more a {
@@ -52,7 +49,6 @@ main > h2 {
 }
 
 time {
-    color: #bbb;
     font-family: 'Outfit', sans-serif;  
 }
 
@@ -94,7 +90,6 @@ body > footer {
     text-align: center;
     height: 2em;
 
-    color: #bbb;
     font-size: small;
     font-family: 'Outfit', sans-serif;
     

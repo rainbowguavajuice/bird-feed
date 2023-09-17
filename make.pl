@@ -7,6 +7,10 @@ use autodie;
 use Getopt::Long;
 use Text::Template;
 
+use FindBin;
+use lib "$FindBin::Bin";
+use imgtex;
+
 binmode STDOUT, ":utf8";
 
 use constant {
@@ -83,7 +87,9 @@ sub fmt_post {
 	# everything enclosed between pairs of dollar signs (i will
 	# torture myself with trying to process TeX input some other
 	# day)
-	s/\$(.+?)\$/\<b\>$1\<\/b\>/g;
+	local $/;
+	s/\$((.|\s)+?)\$/imgtex $1/eg;
+	
 	
 	push @tail, $_;
     }

@@ -1,0 +1,20 @@
+The spectrum and the spectrum
+
+Using the word "spectrum" in both "the spectrum of $a$ in $A$ is all
+$\lambda$ such that $a-\lambda{\bf1}_A$ is not invertible" and "the
+spectrum of $A$ is the space of all nonzero Banach algebra
+homomorphisms $A\to{\Bbb C}$" has to be one of the more evil
+terminology tricks i've seen in a while.
+
+The trick is this: for an element $a$ in a unital commutative Banach
+algebra $A$ over $C$, the set ${\rm spectrum}_1(a)$ turns out to be
+exactly the set $\{h(a):h\in {\rm spectrum}_2(A)\}$.
+
+This is a consequence of the observation that maximal ideals of $A$
+are precisely the kernels of Banach algebra homomorphisms $A\to{\Bbb
+C}$. Once we have convinced ourselves of this, the proof goes like
+this: For $\lambda\in\sigma(a)$, let $f$ be the homomorphism whose
+kernel is the maximal ideal containing $a-\lambda$; $\lambda=f(a)$
+because $f(a)-\lambda=f(a-\lambda {\bf1}_A)=0$. In the other
+direction, if $f:A\to C$ is a homomorphism, then $a-f(a)$, which lies
+within the maximal ideal $\ker f$, must in particular not be a unit.
