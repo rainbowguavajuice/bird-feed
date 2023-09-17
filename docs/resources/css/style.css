@@ -32,7 +32,7 @@ a:hover {
 }
 
 body > header {
-    padding-top: 1ex;
+    padding-top: 1em;
 }
 body > header h1 {
     display: inline;
@@ -53,11 +53,15 @@ body > header > nav > ul {
 }
 body > header > nav > ul > li {
     display: inline;
+    padding-left: 0.4em;
 }
 
 /* page label */
 main > h2 {
     font-size: 1em;
+}
+main > h2::after {
+    content: " ↓";
 }
 
 .read-more a {
@@ -70,19 +74,24 @@ time {
 
 article {
     position: relative;
-    margin-bottom: 3ex;
+    margin-bottom: 1em;
 }
 
 /* article summary on timeline: */
 article.para > header > h3 {
     font-size: 1em;
-    margin-top: 0ex;
+    margin-top: 0;
+    margin-bottom: 0.75em;
 }
 
 /* single article on page: */
 article.full > header > h2 {
     font-size: 1em;
-    margin-bottom: 0.5ex;
+    margin-top: 0;
+    margin-bottom: 0.75em;
+}
+article.full {
+    margin-top: 1em;
 }
 
 ul#archive {

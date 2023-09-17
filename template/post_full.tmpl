@@ -1,14 +1,14 @@
 <article class="full">
 <header>
-<h2><a href="{ $url; }">{ $title; }</a></h2>
 <time datetime="{ $date }">{ $date; }</time>
+<h2><a href="{ $url; }">{ $title; }</a></h2>
 </header>
 <div>
 {
   # ignore paragraph breaks
   join "\n", map {
     # do not render the READ MORE break
-    if ($_ eq '-----') {
+    if ($_ eq '-READ MORE-') {
        ''
     # if the paragraph is in angle brackets, write it down verbatim
     } elsif (((substr $_, 0, 1) eq '<') and

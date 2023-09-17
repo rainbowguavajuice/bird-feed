@@ -8,7 +8,7 @@
 	# find paragraph break
 	my $idx = -1;
 	for my $i (0 .. $#body) {
-	    if ($body[$i] eq '-----') { $idx = $i-1; last; }
+	    if ($body[$i] eq '-READ MORE-') { $idx = $i-1; last; }
 	}
 	$OUT .= join "\n", map { "<p>$_</p>"; } ($idx == -1 ? @body : @body[0..$idx]);
 

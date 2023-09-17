@@ -10,6 +10,7 @@ use Text::Template;
 use FindBin;
 use lib "$FindBin::Bin";
 use imgtex;
+use punct;
 
 binmode STDOUT, ":utf8";
 
@@ -88,7 +89,10 @@ sub fmt_post {
     }
     close $fh;
 
-    # post-processing: render all the bits of TeX
+    # post-processing:
+    # use HTML entities for punctuation
+    punct \@tail;
+    # render all the bits of TeX
     imgtex \@tail;
 
     my $url = permalink_url $id;
