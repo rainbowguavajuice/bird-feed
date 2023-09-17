@@ -8,7 +8,7 @@ body {
     margin: 0 auto;
     padding: 0 8%;
     
-    color: #111;
+    color: #222;
     background-color: #fff;
     font-family: 'Noto Serif', serif;
     font-smooth: never;
@@ -21,11 +21,11 @@ body {
 }
 
 a:link {
-    color: #111;
+    color: #222;
     text-decoration: underline;
 }
 a:visited {
-    color: #111;
+    color: #222;
 }
 a:hover {
     text-decoration: none;
@@ -35,22 +35,37 @@ body > header {
     padding-top: 1ex;
 }
 body > header h1 {
+    display: inline;
+    font-size: 1em;
     /* logo; maybe replace with image later. */
-    font-family: 'Outfit', sans-serif;
+    /* font-family: 'Outfit', sans-serif; */
 }
 body > header > a:link {
     text-decoration: none;
 }
 
+/* navigation bar */
+body > header > nav {
+    display: inline;
+}
+body > header > nav > ul {
+    display: inline;
+}
+body > header > nav > ul > li {
+    display: inline;
+}
+
+/* page label */
 main > h2 {
+    font-size: 1em;
 }
 
 .read-more a {
-    /* font-family: 'Outfit', sans-serif; */
+    font-family: monospace;
 }
 
 time {
-    /* font-family: 'Outfit', sans-serif;   */
+    font-family: monospace;
 }
 
 article {
@@ -58,14 +73,15 @@ article {
     margin-bottom: 3ex;
 }
 
+/* article summary on timeline: */
 article.para > header > h3 {
+    font-size: 1em;
     margin-top: 0ex;
 }
-article.para > header > time {
-    font-size: small;
-}
 
+/* single article on page: */
 article.full > header > h2 {
+    font-size: 1em;
     margin-bottom: 0.5ex;
 }
 

@@ -10,6 +10,8 @@ The trick is this: for an element $a$ in a unital commutative Banach
 algebra $A$ over $C$, the set $\roman{spectrum}_1(a)$ turns out to be
 exactly the set $\{h(a):h\in\roman{spectrum}_2(A)\}$.
 
+-----
+
 This is a consequence of the observation that maximal ideals of $A$
 are precisely the kernels of Banach algebra homomorphisms $A\to{\Bbb
 C}$. (Explicitly: the maximal ideal ${\frak m}\subseteq A$ corresponds
@@ -25,6 +27,4 @@ the other direction: if $f:A\to C$ is a homomorphism, then $a-f(a)$,
 which lies within the maximal ideal $\ker f$, must in particular not
 be a unit.
 
------
-
-(write some stuff about the Gelfand transform maybe)
+(TODO: write some stuff about the Gelfand transform maybe)
